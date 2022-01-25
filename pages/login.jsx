@@ -1,11 +1,12 @@
 import { Fragment, useState } from "react";
 import { NextSeo } from "next-seo";
+import ky, { HTTPError } from "ky";
 
 import styles from "styles/Login.module.scss";
 
 export default function LoginPage () {
   const [state, setState] = useState({
-    username: "",
+    uid: "",
     password: ""
   })
 
@@ -16,8 +17,27 @@ export default function LoginPage () {
     [key]: value
   });
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+
+    try {
+      const data = await ky.post("/api/login", {
+        json: {
+          uid: state.uid,
+          password: state.password
+        }
+      });
+
+      if (data.token) {
+        console.log(data);
+      }
+    }
+    catch (e) {
+      if (e instanceof HTTPError) {
+        const body = await e.response.json();
+        console.error(body.message);
+      } 
+    }
 
     console.log(state);
   }
@@ -33,9 +53,9 @@ export default function LoginPage () {
           onSubmit={handleLogin}
         >
           <input
-            onChange={setStateInput("username")}
-            value={state.username}
-            placeholder="Username"
+            onChange={setStateInput("uid")}
+            value={state.uid}
+            placeholder="Username or E-Mail"
             type="text"
           />
 
