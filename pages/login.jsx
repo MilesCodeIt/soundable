@@ -1,10 +1,12 @@
 import { Fragment, useState } from "react";
+import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import ky, { HTTPError } from "ky";
 
 import styles from "styles/Login.module.scss";
 
 export default function LoginPage () {
+  const router = useRouter();
   const [state, setState] = useState({
     uid: "",
     password: ""
@@ -21,15 +23,15 @@ export default function LoginPage () {
     e.preventDefault();
 
     try {
-      const data = await ky.post("/api/login", {
+      const response = await ky.post("/api/login", {
         json: {
           uid: state.uid,
           password: state.password
         }
-      });
+      }).json();
 
-      if (data.token) {
-        console.log(data);
+      if (response.payload) {
+        router.push("/");
       }
     }
     catch (e) {
@@ -38,8 +40,6 @@ export default function LoginPage () {
         console.error(body.message);
       } 
     }
-
-    console.log(state);
   }
 
   return (
