@@ -1,10 +1,11 @@
-import Head from "next/head";
+import Link from "next/link";
 import styles from "../styles/Home.module.scss";
 
 export default function Home () {
   return (
     <div className={styles.container}>
-      
+      <Link href="/register">Register</Link>
+      <Link href="/login">Login</Link>
     </div>
   )
 }
