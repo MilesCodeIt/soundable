@@ -1,25 +1,22 @@
-import useSWR from "swr";
+import { Fragment } from "react";
+import styles from "./styles.module.scss";
+
+// import useUser from "utils/web/useUser";
+
 
 export default function AppLayout ({ children }) {
-  const { data: user, error, loading } = useSWR("/api/me");
-
-  if (!error && loading) return (
-    <div>
-      <h2>Loading data...</h2>
-    </div>
-  );
+  // const { data } = useUser();
 
   return (
-    <div>
-      {user ? (
-        <p>Authenticated</p>
-      ) : (
-        <div>
-          <p>Login</p>
-        </div>
-      )}
-      
-      {children}
-    </div>
+    <Fragment>
+      <header className={styles.navbar_container}>
+        <a>Soundable</a>
+        <a>Sign-in</a>
+      </header>
+
+      <main className={styles.content_container}>
+        {children}
+      </main>
+    </Fragment>
   );
 }

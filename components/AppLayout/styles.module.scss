@@ -1,0 +1,22 @@
+$navbar-height: 72px;
+
+.navbar_container {
+  position: fixed;
+  top: 0;
+
+  width: 100vw;
+  height: $navbar-height;
+  
+  background: #000;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+
+.content_container {
+  margin: $navbar-height;
+  padding: 2em 2.5em;
+}
