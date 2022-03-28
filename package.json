@@ -8,17 +8,27 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/jsdom": "^16.2.14",
     "bcryptjs": "^2.4.3",
+    "cheerio": "^1.0.0-rc.10",
+    "chrome-aws-lambda": "^10.1.0",
+    "got": "^12.0.2",
     "jsonwebtoken": "^8.5.1",
-    "ky": "^0.28.7",
+    "ky": "^0.30.0",
     "mongoose": "^6.1.8",
     "next": "12.0.9",
     "next-seo": "^4.29.0",
+    "node-fetch": "2",
     "nookies": "^2.5.2",
+    "playwright-core": "^1.20.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-google-recaptcha": "^2.1.0",
+    "react-google-recaptcha-enterprise": "^1.0.3",
+    "react-google-recaptcha-v3": "^1.9.7",
     "sass": "^1.49.0",
-    "swr": "^1.2.2"
+    "swr": "^1.2.2",
+    "ws": "^8.5.0"
   },
   "devDependencies": {
     "eslint": "8.7.0",
