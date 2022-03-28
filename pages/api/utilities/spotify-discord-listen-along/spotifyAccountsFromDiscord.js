@@ -72,7 +72,7 @@ export default async function handler (req, res) {
   catch (e) {
     res.status(403).json({
       success: false,
-      message: "An error was throwned by the WebSocket.",
+      message: "An error was thrown by the WebSocket.",
       debug: e
     });
   }
