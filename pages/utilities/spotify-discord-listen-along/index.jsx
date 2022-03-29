@@ -21,16 +21,51 @@ export default function SpotifyDiscordListenAlongHome () {
 
   // - // Connecting to a new Spotify WS session.
   const [currentSpotifySocket, setCurrentSpotifySocket] = useState(null);
-  const handleSpotifyNewSocket = async () => {
+  const [spotifySocketPingInterval, setSpotifySocketPingInterval] = useState(null);
+  const handleSpotifyNewSocket = async (account_index) => {
     // If a Spotify session was already connected,
     // we close it before creating a new one.
-    if (currentSpotifyWsConnection) { 
+    if (currentSpotifySocket) { 
       currentSpotifySocket.close();
+      console.info("[SpotifySocket] Closed current socket.");
     }
-
+    
+    console.info("[SpotifySocket] Creating a new socket.");
     const spotify_socket = new WebSocket(
-      `wss://dealer.spotify.com/?access_token=${spotify_accounts[account_to_use_index].access_token}`
+      `wss://dealer.spotify.com/?access_token=${spotify_accounts[account_index].access_token}`
     );
+
+    spotify_socket.addEventListener("open", () => {
+      setCurrentSpotifySocket(spotify_socket);
+      console.info("[SpotifySocket] Connected to socket.");
+
+      if (spotifySocketPingInterval)
+        clearInterval(spotifySocketPingInterval);
+
+      /** Pinging Spotify every 30s. */
+      const ping_interval = setInterval(() => {
+        console.info("[SpotifySocket] Ping Spotify.")
+
+        spotify_socket.send(JSON.stringify({
+          type: "ping"
+        }));
+      }, 30_000);
+
+      setSpotifySocketPingInterval(ping_interval);
+      console.info("[SpotifySocket] Ping interval was setup for every 30s.");
+    });
+
+    spotify_socket.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+
+      switch (data.type) {
+        case "pong":
+          console.info("[SpotifySocket] Pong received.");
+          break;
+        default:
+          console.info("[SpotifySocket] Can't undestand this message.", data);
+      }
+    });
   }
 
   return (
@@ -39,8 +74,13 @@ export default function SpotifyDiscordListenAlongHome () {
 
       {spotify_accounts.length > 0
         ? <div>
-          {spotify_accounts.map((account) =>
-            <p key={account.id}>Use {account.name} ({account.id})</p>
+          {spotify_accounts.map((account, account_index) =>
+            <a
+              key={account.id}
+              onClick={() => handleSpotifyNewSocket(account_index)}  
+            >
+              Use {account.name} ({account.id})
+            </a>
           )}
         </div>
         : <div>
