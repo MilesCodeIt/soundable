@@ -23,7 +23,7 @@ export default function SpotifyDiscordListenAlongLogin () {
 
       const token = tempDiscordToken.replace(/"/gm, "");
       const data = await ky.post(
-        "/api/utilities/spotify-discord-listen-along/spotifyAccountsFromDiscord",
+        "/api/utilities/spotify-discord-listen-along/spotify_accounts",
         {
           json: {
             discord_token: token

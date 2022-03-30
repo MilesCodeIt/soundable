@@ -1,4 +1,5 @@
 import got, { HTTPError } from "got";
+import { chromeLinuxUserAgent } from "utils/api/httpHelpers";
 
 export default async function handler (req, res) {
   if (req.method !== "POST") return res.status(404).json({
@@ -19,14 +20,12 @@ export default async function handler (req, res) {
   });
 
   try {
-    const data = await got.get(
-      `https://discord.com/api/v9/users/@me/connections/spotify/${spotify_user_id}/access-token`,
-      {
-        headers: {
-          "Authorization": discord_token
-        }
+    const data = await got.get(`https://discord.com/api/v9/users/@me/connections/spotify/${spotify_user_id}/access-token`, {
+      headers: {
+        "User-Agent": chromeLinuxUserAgent,
+        "Authorization": discord_token
       }
-    ).json();
+    }).json();
 
     const { access_token } = data;
     return res.status(200).json({
